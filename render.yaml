@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: email-guard
+    runtime: docker
+    plan: free
+    region: oregon
+    branch: main
+    dockerfilePath: ./Dockerfile
+    dockerContext: "."
+    healthCheckPath: /
+    autoDeployTrigger: commit
+  # Render supplies PORT=10000; Dockerfile uses it with a local fallback.

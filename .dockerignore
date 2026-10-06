@@ -1,0 +1,11 @@
+/.git
+/.vscode
+/tests
+/*.md
+/R-4.6.1-win.exe
+/.Rhistory
+/.RData
+/.Ruserdata
+/spam_dataset.csv
+/models/*.rds
+/models/*.csv

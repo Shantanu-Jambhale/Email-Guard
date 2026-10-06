@@ -43,6 +43,46 @@ shiny::runApp()
 
 The app opens in your browser. It also trains the models at startup and refreshes `models/naive_bayes_model.rds`.
 
+## Deploy on Render
+
+This project uses a **Docker web service** because Render's native language runtimes do not include R. The repository includes a `Dockerfile`, `.dockerignore`, and `render.yaml` Blueprint. The container installs the required R packages, launches Shiny on `0.0.0.0`, and reads the port supplied by Render through `PORT` (defaulting locally to `10000`). No secrets or external services are required.
+
+### Blueprint deployment (recommended)
+
+1. Push the project, including `Dockerfile` and `render.yaml`, to the repository's `main` branch.
+2. Sign in to [Render](https://dashboard.render.com/) and choose **New + → Blueprint**.
+3. Connect GitHub if prompted, then select `Shantanu-Jambhale/Email-Guard` and the `main` branch.
+4. Render detects `render.yaml`. Review the service named `email-guard` and click **Apply**.
+5. Open the service's **Events** or **Logs** page. Wait for the Docker build and first deploy to finish.
+6. Open the `onrender.com` URL Render assigns to the service.
+
+The Blueprint uses the Free web-service plan in Oregon, deploys from `main`, and checks `/` for health. Change the plan or region in `render.yaml` before applying if needed.
+
+### Dashboard setup instead
+
+If you prefer not to use a Blueprint, select **New + → Web Service**, connect this GitHub repository, and set:
+
+| Setting | Value |
+|---|---|
+| Branch | `main` |
+| Language / Runtime | Docker |
+| Dockerfile path | `./Dockerfile` |
+| Docker build context | `.` (repository root) |
+| Docker command | Leave blank; use the Dockerfile `CMD` |
+| Health check path | `/` |
+| Plan | Free for a classroom demo, or choose a paid plan |
+
+You do not need to enter a build command, start command, or environment variable. Render provides `PORT`; the container binds Shiny to that port on `0.0.0.0`, as required for Render web services.
+
+### Deploy behavior and troubleshooting
+
+- The first deploy takes longer because Docker installs R packages. Later builds can reuse cached layers.
+- If startup fails, check the service's deploy logs for package installation errors, then its runtime logs for R/Shiny errors.
+- Confirm the service is configured as a **Web Service** using the Docker runtime, not as a static site.
+- Render's Free services can spin down when idle, so the first visit after inactivity may take longer. A paid plan avoids the free-instance sleep behavior.
+- This app trains from `data/spam_dataset.csv` on startup. Its saved RDS model and prediction history are ephemeral; the app regenerates the model on restart, and history is intentionally limited to a live Shiny session. No persistent disk is needed for this demo.
+- You do not need Docker Desktop to deploy through Render; Render builds the image from the repository. For local image builds, install Docker Desktop and run `docker build -t email-guard .` followed by `docker run --rm -p 10000:10000 -e PORT=10000 email-guard`.
+
 ## Try a message
 
 **SPAM sample**
@@ -115,6 +155,9 @@ These values are calculated from actual predictions on the fixed test split. The
 ```text
 .
 ├── app.R
+├── Dockerfile
+├── .dockerignore
+├── render.yaml
 ├── train.R
 ├── spam_dataset.csv
 ├── data/
