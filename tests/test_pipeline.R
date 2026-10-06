@@ -23,6 +23,7 @@ stopifnot(
   nrow(bundle$dataset) == 500,
   sum(bundle$dataset$label == "spam") == 300,
   sum(bundle$dataset$label == "ham") == 200,
+  all(spam_keywords %in% bundle$manual_model$vocabulary),
   length(intersect(bundle$train_indices, bundle$test_indices)) == 0,
   length(bundle$test_indices) == 100,
   spam_sample$manual$prediction == "spam",

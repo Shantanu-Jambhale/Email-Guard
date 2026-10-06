@@ -1,3 +1,15 @@
+spam_keywords <- c(
+  "free", "winner", "win", "prize", "money", "cash", "offer", "discount",
+  "claim", "reward", "urgent", "congratulations", "lottery", "bonus", "click",
+  "deal", "promotion", "credit", "loan", "investment", "guaranteed", "exclusive",
+  "limited", "cashback", "voucher", "jackpot", "debt", "relief", "preapproved",
+  "refund", "gift", "card", "risk", "crypto", "bitcoin", "payout", "commission",
+  "income", "verify", "account", "suspended", "security", "billing", "invoice",
+  "subscription", "renewal", "password", "transfer", "beneficiary", "inheritance",
+  "tax", "profit", "deposit", "unlock", "eligible", "approval", "fee", "code",
+  "wire", "payment", "selected", "instant", "passive"
+)
+
 generate_dataset <- function(output_directory = "data", seed = 123) {
   set.seed(seed)
 
@@ -37,6 +49,21 @@ generate_dataset <- function(output_directory = "data", seed = 123) {
     "Accept the free offer while it is available.",
     "Contact our team to unlock your reward."
   )
+  spam_keyword_sentences <- c(
+    "Your free entry guarantees a prize for one winner. Click to claim the cash payout.",
+    "Congratulations: win the lottery jackpot with an exclusive, limited offer.",
+    "A guaranteed investment returns profit and commission; start your passive income today.",
+    "Preapproved credit and loan offer: get cashback, debt relief, and a discount.",
+    "Your voucher and gift card are ready; verify your account to unlock the reward.",
+    "Urgent security notice: your billing account is suspended until the payment fee is paid.",
+    "An inheritance transfer is waiting for the selected beneficiary; pay the wire fee to receive funds.",
+    "Your tax refund code is ready; deposit the claim payment to collect a guaranteed reward.",
+    "Your credit application approval code is ready; claim the instant payout.",
+    "Confirm the subscription renewal to keep your exclusive bonus offer.",
+    "Bitcoin and crypto investment promises risk-free income and an instant payout.",
+    "Eligible winners can claim the prize through our limited-time promotion.",
+    "Your invoice is overdue; verify your account password to prevent suspension."
+  )
 
   ham_openers <- c(
     "Hello team, the project meeting is scheduled for tomorrow.",
@@ -75,21 +102,25 @@ generate_dataset <- function(output_directory = "data", seed = 123) {
     "See you at the lecture."
   )
 
-  make_messages <- function(count, first, second, third) {
+  make_messages <- function(count, first, second, third, extra_phrases = character()) {
     vapply(seq_len(count), function(index) {
-      paste(
+      message_parts <- c(
         sample(first, 1),
         sample(second, 1),
-        sample(third, 1),
-        sep = " "
+        sample(third, 1)
       )
+      if (length(extra_phrases) > 0) {
+        phrase_index <- ((index - 1) %% length(extra_phrases)) + 1
+        message_parts <- c(message_parts, extra_phrases[[phrase_index]])
+      }
+      paste(message_parts, collapse = " ")
     }, character(1), USE.NAMES = FALSE)
   }
 
   dataset <- data.frame(
     id = seq_len(500),
     email_text = c(
-      make_messages(300, spam_openers, spam_details, spam_calls),
+      make_messages(300, spam_openers, spam_details, spam_calls, spam_keyword_sentences),
       make_messages(200, ham_openers, ham_details, ham_closings)
     ),
     label = c(rep("spam", 300), rep("ham", 200)),
@@ -97,6 +128,15 @@ generate_dataset <- function(output_directory = "data", seed = 123) {
   )
   dataset <- dataset[sample(seq_len(nrow(dataset))), , drop = FALSE]
   rownames(dataset) <- NULL
+
+  spam_messages <- dataset$email_text[dataset$label == "spam"]
+  keyword_coverage <- vapply(spam_keywords, function(keyword) {
+    any(grepl(paste0("\\b", keyword, "\\b"), spam_messages, ignore.case = TRUE))
+  }, logical(1))
+  if (any(!keyword_coverage)) {
+    stop("Generated SPAM examples are missing keywords: ",
+      paste(spam_keywords[!keyword_coverage], collapse = ", "))
+  }
 
   dir.create(output_directory, recursive = TRUE, showWarnings = FALSE)
   write.csv(dataset, file.path(output_directory, "spam_dataset.csv"), row.names = FALSE)
