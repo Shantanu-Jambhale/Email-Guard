@@ -1,0 +1,5 @@
+"Actual","Predicted","Freq"
+"spam","spam",60
+"ham","spam",0
+"spam","ham",0
+"ham","ham",40

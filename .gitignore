@@ -1,0 +1,6 @@
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+.vscode/settings.json
+R-4.6.1-win.exe

@@ -1,0 +1,134 @@
+:root {
+  --ink: #22312f;
+  --muted: #667572;
+  --paper: #f4f6f2;
+  --surface: #ffffff;
+  --green: #267a68;
+  --green-dark: #195747;
+  --coral: #d96a45;
+  --gold: #d6a33f;
+  --line: #dce4df;
+}
+
+body, .content-wrapper, .right-side {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Aptos", "Segoe UI", sans-serif;
+}
+
+.main-header .logo {
+  background: var(--green-dark) !important;
+  color: #fff !important;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.main-header .navbar, .main-header .logo:hover {
+  background: var(--green) !important;
+}
+
+.main-sidebar, .left-side {
+  background: #263a35;
+}
+
+.sidebar-menu > li > a {
+  color: #d8e5df;
+  padding: 14px 16px;
+}
+
+.sidebar-menu > li.active > a, .sidebar-menu > li:hover > a {
+  background: #38564d;
+  border-left-color: var(--gold);
+  color: #fff;
+}
+
+.content-wrapper { min-height: calc(100vh - 50px); }
+.content { padding: 24px; }
+
+.home-intro {
+  min-height: 300px;
+  padding: 34px 38px;
+  background: linear-gradient(115deg, #e6f0e9 0%, #f7f4e9 70%, #f6e5db 100%);
+  border-left: 5px solid var(--green);
+  margin-bottom: 18px;
+}
+
+.home-intro h1 {
+  margin: 10px 0 4px;
+  color: var(--green-dark);
+  font-size: 42px;
+  font-weight: 800;
+}
+
+.eyebrow {
+  color: var(--coral);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.lead-copy { font-size: 22px; font-weight: 650; }
+.home-intro p:not(.eyebrow):not(.lead-copy) { max-width: 650px; color: #50605b; }
+
+.formula-panel {
+  min-height: 300px;
+  padding: 32px 26px;
+  background: #263a35;
+  color: #f5f7f2;
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.formula-panel .eyebrow { color: #e7bc62; }
+.formula { font-family: Georgia, serif; font-size: 22px; line-height: 1.5; overflow-wrap: anywhere; }
+.formula-panel p:last-child { color: #cad8d1; margin-top: 14px; }
+
+.box { border-radius: 3px; box-shadow: 0 1px 3px rgba(26, 45, 38, 0.08); border-top-width: 2px; }
+.box.box-solid > .box-header { background: #fff; color: var(--ink); border-bottom: 1px solid var(--line); }
+.box-title { font-size: 15px; font-weight: 700; }
+.box-body { color: #4e5e59; }
+
+.primary-action {
+  background: var(--green) !important;
+  color: #fff !important;
+  border-color: var(--green) !important;
+}
+
+.button-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.button-row .btn { margin: 0; }
+#email-char-count { color: var(--muted); font-size: 12px; text-align: right; padding: 4px 0 12px; }
+
+.form-control { border-color: #cbd7d0; border-radius: 2px; box-shadow: none; }
+.form-control:focus { border-color: var(--green); box-shadow: 0 0 0 2px rgba(38, 122, 104, 0.13); }
+
+.prediction-result { padding: 17px 18px; border-left: 4px solid var(--green); background: #f0f5f1; }
+.prediction-result.spam { border-left-color: var(--coral); background: #fbf0eb; }
+.prediction-label { margin: 2px 0 15px; font-size: 30px; font-weight: 800; }
+.probability-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.probability-pair div { display: flex; flex-direction: column; gap: 4px; }
+.probability-pair span, .confidence-line { color: var(--muted); font-size: 12px; }
+.probability-pair strong { color: var(--ink); font-size: 19px; }
+.empty-state { min-height: 100px; display: flex; align-items: center; color: var(--muted); }
+.comparison-lines p { border-bottom: 1px solid var(--line); padding: 10px 0; }
+.bayes-step { padding: 15px 0; border-bottom: 1px solid var(--line); }
+.bayes-step h3 { margin: 0 0 9px; color: var(--green-dark); font-size: 16px; font-weight: 750; }
+.bayes-step p { margin-bottom: 6px; }
+.final-step { border-bottom: 0; }
+.final-step strong { color: var(--coral); }
+
+.value-box { border-radius: 3px; box-shadow: 0 1px 3px rgba(26, 45, 38, 0.08); }
+.value-box .inner h3 { font-size: 24px; }
+.clear-action { margin-bottom: 6px; }
+.dataTables_wrapper { overflow-x: auto; }
+table.dataTable thead th { color: var(--green-dark); }
+
+@media (max-width: 767px) {
+  .content { padding: 12px; }
+  .home-intro { padding: 24px 20px; min-height: auto; }
+  .home-intro h1 { font-size: 34px; }
+  .formula-panel { min-height: 220px; }
+  .button-row { align-items: stretch; }
+  .button-row .btn { flex: 1 1 100%; }
+}
